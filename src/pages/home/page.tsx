@@ -1,7 +1,6 @@
 import { Link } from 'atomic-router-react'
 import IPhone from '~/assets/iphone.svg?react'
 import { routes } from '~/shared/routing'
-import { ThemeToggle } from '~/shared/theme'
 import { Button, Title, WebiscardIcon } from '~/shared/ui'
 
 export const HomePage = () => {
@@ -9,12 +8,9 @@ export const HomePage = () => {
     <>
       <header className="container mx-auto mt-8 flex justify-between items-center">
         <WebiscardIcon />
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-          <Button asChild variant="outline">
-            <Link to={routes.auth.login}>Sign in</Link>
-          </Button>
-        </div>
+        <Button asChild variant="outline">
+          <Link to={routes.auth.login}>Sign in</Link>
+        </Button>
       </header>
       <main className="overflow-hidden">
         <div className="container mx-auto flex flex-col lg:flex-row items-center lg:justify-between py-16 relative">

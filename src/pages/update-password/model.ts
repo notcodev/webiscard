@@ -1,5 +1,5 @@
 import { chainRoute, RouteInstance, RouteParamsAndQuery } from 'atomic-router'
-import { attach, createEvent, createStore, sample } from 'effector'
+import { attach, createEvent, createStore, sample, Store } from 'effector'
 import { and, every, not } from 'patronum'
 import * as api from '~/shared/api'
 import { createField } from '~/shared/lib/effector'
@@ -82,16 +82,10 @@ sample({
 
 export const $formValid = every({
   stores: [
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     currentPasswordField.$error,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     newPasswordField.$error,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     confirmPasswordField.$error,
-  ],
+  ] as Store<string | null>[],
   predicate: null,
 })
 export const $formDisabled = createStore(false)

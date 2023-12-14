@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { ThemeToggle } from '~/shared/theme'
 import { Tabs, TabsContent, TabsList, TabsTrigger, Title } from '~/shared/ui'
 import { pageUnmounted } from './shared/config'
 import { BackgroundTab } from './widgets/background-tab'
@@ -47,9 +46,6 @@ export const EditorPage = () => {
       <div className="hidden left-0 top-0 bottom-0 fixed md:flex md:border-r bg-background flex-col w-full md:w-[384px] p-6 h-full overflow-scroll">
         <Header />
         <EditorTabs />
-      </div>
-      <div className="fixed right-3 bottom-3">
-        <ThemeToggle variant="secondary" />
       </div>
     </main>
   )

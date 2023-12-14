@@ -1,5 +1,4 @@
 import { PropsWithChildren } from 'react'
-import { ThemeToggle } from '~/shared/theme'
 import { WebiscardIcon } from '~/shared/ui'
 
 export const AuthLayout = ({ children }: PropsWithChildren) => {
@@ -15,9 +14,6 @@ export const AuthLayout = ({ children }: PropsWithChildren) => {
       <div className="lg:border-l flex items-center bg-background flex-col gap-12 w-full lg:w-fit lg:min-w-[384px] lg:px-4 h-screen pt-16">
         <WebiscardIcon />
         {children}
-      </div>
-      <div className="absolute right-3 bottom-3">
-        <ThemeToggle />
       </div>
     </main>
   )

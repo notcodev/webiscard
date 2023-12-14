@@ -1,4 +1,4 @@
-import { attach, createEvent, createStore, sample } from 'effector'
+import { attach, createEvent, createStore, sample, Store } from 'effector'
 import { and, every, not, or } from 'patronum'
 import * as api from '~/shared/api'
 import { createField, createTimeoutRedirect } from '~/shared/lib/effector'
@@ -70,9 +70,11 @@ export const usernameField = createField<string, UsernameError>({
 })
 
 const $formValid = every({
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  stores: [passwordField.$error, emailField.$error, usernameField.$error],
+  stores: [
+    passwordField.$error,
+    emailField.$error,
+    usernameField.$error,
+  ] as Store<string | null>[],
   predicate: null,
 })
 

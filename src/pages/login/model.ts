@@ -1,4 +1,4 @@
-import { attach, createEvent, sample } from 'effector'
+import { attach, createEvent, sample, Store } from 'effector'
 import { and, every, not, or } from 'patronum'
 import * as api from '~/shared/api'
 import { createBoolean, createField } from '~/shared/lib/effector'
@@ -53,12 +53,7 @@ export const rememberMe = createBoolean(true)
 export const $loginPending = or(signInFx.pending, getSessionFx.pending)
 
 const $formValid = every({
-  stores: [
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    passwordField.$error,
-    emailField.$error,
-  ],
+  stores: [passwordField.$error, emailField.$error] as Store<string | null>[],
   predicate: null,
 })
 
