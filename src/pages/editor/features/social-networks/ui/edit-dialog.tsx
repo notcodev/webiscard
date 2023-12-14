@@ -1,6 +1,6 @@
 import { useUnit } from 'effector-react'
 import { ReactElement, useId, useRef } from 'react'
-import { SocialNetworkConfig } from '~/entites/social-network'
+import { SocialNetworkConfig } from '~/entites/business-card'
 import * as socialNetworks from '~/pages/editor/features/social-networks'
 import { PrefixInput } from '~/pages/editor/shared/ui'
 import { SocialNetworkButton } from '~/shared/api'

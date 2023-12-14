@@ -1,6 +1,5 @@
 export * from './alert'
 export * from './anchor'
-export * from './business-card'
 export * from './button'
 export * from './card'
 export * from './checkbox'

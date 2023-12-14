@@ -1,13 +1,12 @@
 import { useList, useUnit } from 'effector-react'
 import { ChangeEvent, PropsWithChildren, useId } from 'react'
-import { socialNetworkConfig } from '~/entites/social-network'
+import { BusinessCard, socialNetworkConfig } from '~/entites/business-card'
 import * as background from '~/pages/editor/features/background'
 import * as description from '~/pages/editor/features/description'
 import * as name from '~/pages/editor/features/name'
 import * as photo from '~/pages/editor/features/photo'
 import * as socialNetworks from '~/pages/editor/features/social-networks'
 import { EditDialog } from '~/pages/editor/features/social-networks'
-import { BusinessCard, SocialNetworkEntry } from '~/shared/ui'
 import { useAutoResizableField } from './lib/react'
 
 const Photo = () => {
@@ -112,7 +111,7 @@ const SocialNetworks = () => {
       return (
         <EditDialog
           key={key}
-          dialogTrigger={<SocialNetworkEntry config={config} />}
+          dialogTrigger={<BusinessCard.SocialNetwork config={config} />}
           {...config}
           {...button}
         />

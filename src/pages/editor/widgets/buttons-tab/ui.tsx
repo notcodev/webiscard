@@ -1,5 +1,5 @@
 import { useList } from 'effector-react'
-import { socialNetworkConfig } from '~/entites/social-network'
+import { socialNetworkConfig } from '~/entites/business-card'
 import { PrefixInput } from '~/pages/editor/shared/ui'
 import { Button, Label } from '~/shared/ui'
 import { SocialNetworkIcon } from '../../entities/social-network-icon'

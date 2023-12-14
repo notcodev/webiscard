@@ -4,10 +4,33 @@ import { SocialNetwork, SocialNetworkButton } from '~/shared/api'
 
 /* Playground */
 
-const id = uuidv4()
+const ids = Array.from({ length: 6 }).map(() => uuidv4())
 
 const initialState: Record<string, SocialNetworkButton> = {
-  [id]: { type: SocialNetwork.MESSENGER, enabled: true, value: 'test', id },
+  [ids[0]]: {
+    type: SocialNetwork.MESSENGER,
+    enabled: true,
+    value: 'test',
+    id: ids[0],
+  },
+  [ids[1]]: {
+    type: SocialNetwork.WHATSAPP,
+    enabled: true,
+    value: 'test',
+    id: ids[1],
+  },
+  [ids[2]]: {
+    type: SocialNetwork.YOUTUBE,
+    enabled: true,
+    value: 'test',
+    id: ids[2],
+  },
+  [ids[3]]: {
+    type: SocialNetwork.GITHUB,
+    enabled: true,
+    value: 'test',
+    id: ids[3],
+  },
 }
 
 /* */
