@@ -1,7 +1,6 @@
 import { useUnit } from 'effector-react'
 import { ReactElement, useId, useRef } from 'react'
 import { SocialNetworkConfig } from '~/entites/business-card'
-import * as socialNetworks from '~/pages/editor/features/social-networks'
 import { PrefixInput } from '~/pages/editor/shared/ui'
 import { SocialNetworkButton } from '~/shared/api'
 import {
@@ -18,6 +17,7 @@ import {
   Switch,
 } from '~/shared/ui'
 import { SocialNetworkIcon } from '../../../entities/social-network-icon'
+import { buttonsApi } from '../model'
 
 interface EditDialogProps
   extends SocialNetworkConfig,
@@ -41,17 +41,16 @@ export const EditDialog = ({
   const switchRef = useRef<HTMLButtonElement | null>(null)
   const switchId = useId()
 
-  const [changed, removed] = useUnit([
-    socialNetworks.buttonChanged,
-    socialNetworks.buttonRemoved,
+  const [updateButton, removeButton] = useUnit([
+    buttonsApi.update,
+    buttonsApi.remove,
   ])
 
   const onSavePressed = () => {
     if (!switchRef.current || !inputRef.current) {
       return
     }
-
-    changed({
+    updateButton({
       id,
       value: inputRef.current.value,
       enabled: switchRef.current.dataset.state === 'checked',
@@ -61,7 +60,7 @@ export const EditDialog = ({
   return (
     <Dialog>
       <DialogTrigger asChild>{dialogTrigger}</DialogTrigger>
-      <DialogContent className="rounded-md md:max-w-[425px]">
+      <DialogContent className="rounded-md sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Edit</DialogTitle>
           <DialogDescription>
@@ -78,9 +77,15 @@ export const EditDialog = ({
               ref={inputRef}
               type={input.type}
               defaultValue={value}
+              placeholder={input.placeholder}
               prefix={input.prefix}
             />
           </div>
+          {input.hint && (
+            <span className="text-sm text-muted-foreground leading-none">
+              {input.hint}
+            </span>
+          )}
         </div>
         <div className="flex items-center gap-2">
           <Switch ref={switchRef} defaultChecked={enabled} id={switchId} />
@@ -94,7 +99,7 @@ export const EditDialog = ({
             <Button
               className="border-red-500 text-red-600 hover:text-background hover:bg-red-500"
               variant="outline"
-              onClick={() => removed(id)}
+              onClick={() => removeButton(id)}
             >
               Remove
             </Button>
