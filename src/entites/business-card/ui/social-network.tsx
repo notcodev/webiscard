@@ -11,7 +11,7 @@ export const SocialNetwork = forwardRef<HTMLButtonElement, SocialNetworkProps>(
     const { gradient, name, icon: Icon } = config
 
     return (
-      <div className="flex flex-col gap-2 items-center m-3 lg:mx-5">
+      <div className="group flex flex-col gap-2 items-center m-3 lg:mx-5">
         <button
           ref={ref}
           className="flex justify-center items-center flex-none w-16 h-16 rounded-full"
@@ -21,7 +21,9 @@ export const SocialNetwork = forwardRef<HTMLButtonElement, SocialNetworkProps>(
           <Icon className="h-9 w-9 fill-white" />
         </button>
 
-        <span className="text-xs text-muted-foreground">{name}</span>
+        <span className="text-xs text-muted-foreground group-hover:text-foreground">
+          {name}
+        </span>
       </div>
     )
   },
