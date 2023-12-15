@@ -6,8 +6,9 @@ import * as description from '~/pages/editor/features/description'
 import * as name from '~/pages/editor/features/name'
 import * as photo from '~/pages/editor/features/photo'
 import * as socialNetworks from '~/pages/editor/features/social-networks'
-import { EditDialog } from '~/pages/editor/features/social-networks'
+import { AddDialog, EditDialog } from '~/pages/editor/features/social-networks'
 import { useAutoResizableField } from './lib/react'
+import { Plus } from 'lucide-react'
 
 const Photo = () => {
   const inputId = useId()
@@ -98,6 +99,22 @@ const CardWrapper = ({ children }: PropsWithChildren) => {
   )
 }
 
+const AddLinkButton = () => {
+  const dialogTrigger = (
+    <div className="group flex flex-col gap-2 items-center m-3 lg:mx-5">
+      <button className="flex justify-center items-center flex-none w-16 h-16 rounded-full bg-muted">
+        <Plus className="h-9 w-9 text-muted-foreground group-hover:text-foreground" />
+      </button>
+
+      <span className="text-xs text-muted-foreground group-hover:text-foreground">
+        Add link
+      </span>
+    </div>
+  )
+
+  return <AddDialog dialogTrigger={dialogTrigger} />
+}
+
 const SocialNetworks = () => {
   const countOfEnabledButtons = useUnit(socialNetworks.$enabledButtonsCount)
 
@@ -119,15 +136,29 @@ const SocialNetworks = () => {
     },
   })
 
+  const addLinkElement = (
+    <div className="flex justify-center flex-wrap md:hidden">
+      <AddLinkButton />
+    </div>
+  )
+
   if (!countOfEnabledButtons) {
     return (
-      <p className="bg-accent py-8 px-4 rounded-md mt-6 text-muted-foreground text-sm text-center">
-        Add your social media links and ways to contact you in the left panel
-      </p>
+      <>
+        <p className="hidden md:block bg-accent py-8 px-6 lg:px-12 rounded-md mt-6 text-muted-foreground text-sm text-center">
+          Add your social media links and ways to contact you in the left panel
+        </p>
+        {addLinkElement}
+      </>
     )
   }
 
-  return <div className="flex justify-around flex-wrap mt-4">{buttons}</div>
+  return (
+    <>
+      <div className="flex justify-center flex-wrap mt-4">{buttons}</div>
+      {addLinkElement}
+    </>
+  )
 }
 
 export const PreviewCard = () => {

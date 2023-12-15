@@ -4,7 +4,7 @@ import { PrefixInput } from '~/pages/editor/shared/ui'
 import { Button, Label } from '~/shared/ui'
 import { SocialNetworkIcon } from '../../entities/social-network-icon'
 import * as socialNetworks from '../../features/social-networks'
-import { EditDialog } from '../../features/social-networks'
+import { AddDialog, EditDialog } from '../../features/social-networks'
 
 export const ButtonsTab = () => {
   const buttons = useList(socialNetworks.$buttonsList, {
@@ -36,7 +36,7 @@ export const ButtonsTab = () => {
       <div className="flex flex-col gap-3">
         <Label>Social networks and messengers</Label>
         {buttons}
-        <Button size="lg">+ Add button</Button>
+        <AddDialog dialogTrigger={<Button size="lg">+ Add button</Button>} />
       </div>
     </div>
   )
