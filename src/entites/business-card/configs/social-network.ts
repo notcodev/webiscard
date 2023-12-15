@@ -1,6 +1,7 @@
 import { FC, HTMLInputTypeAttribute, SVGAttributes } from 'react'
 import Behance from '~/assets/social-networks/behance.svg?react'
 import Dribbble from '~/assets/social-networks/dribbble.svg?react'
+import Email from '~/assets/social-networks/email.svg?react'
 import Facebook from '~/assets/social-networks/facebook.svg?react'
 import GitHub from '~/assets/social-networks/github.svg?react'
 import Instagram from '~/assets/social-networks/instagram.svg?react'
@@ -10,7 +11,10 @@ import OK from '~/assets/social-networks/odnoklassniki.svg?react'
 import Skype from '~/assets/social-networks/skype.svg?react'
 import Snapchat from '~/assets/social-networks/snapchat.svg?react'
 import Telegram from '~/assets/social-networks/telegram.svg?react'
+import Telephone from '~/assets/social-networks/telephone.svg?react'
 import TwitterX from '~/assets/social-networks/twitterx.svg?react'
+import Viber from '~/assets/social-networks/viber.svg?react'
+import VK from '~/assets/social-networks/vk.svg?react'
 import WhatsApp from '~/assets/social-networks/whatsapp.svg?react'
 import YouTube from '~/assets/social-networks/youtube.svg?react'
 import { SocialNetwork } from '~/shared/api'
@@ -55,7 +59,7 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
   },
   [SocialNetwork.VKONTAKTE]: {
     name: 'VKontakte',
-    icon: Messenger, // TODO
+    icon: VK,
     gradient: 'linear-gradient(180deg,#659de1,#45668e)',
     input: {
       type: 'text',
@@ -65,7 +69,7 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
   },
   [SocialNetwork.VIBER]: {
     name: 'Viber',
-    icon: Messenger, // TODO
+    icon: Viber,
     gradient: 'linear-gradient(180deg,#b389cb,#7c519b)',
     input: {
       type: 'tel',
@@ -124,7 +128,7 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
   },
   [SocialNetwork.EMAIL]: {
     name: 'Email',
-    icon: Messenger, // TODO
+    icon: Email,
     gradient: 'linear-gradient(180deg,#689bff,#4a88ff)',
     input: {
       type: 'email',
@@ -143,7 +147,7 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
   },
   [SocialNetwork.TELEPHONE]: {
     name: 'Telephone',
-    icon: Messenger, // TODO
+    icon: Telephone,
     gradient: 'linear-gradient(180deg,#17e48a,#06bb6c)',
     input: {
       type: 'tel',
