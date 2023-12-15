@@ -1,4 +1,5 @@
 import { useList, useUnit } from 'effector-react'
+import { Plus } from 'lucide-react'
 import { ChangeEvent, PropsWithChildren, useId } from 'react'
 import { BusinessCard, socialNetworkConfig } from '~/entites/business-card'
 import * as background from '~/pages/editor/features/background'
@@ -8,7 +9,6 @@ import * as photo from '~/pages/editor/features/photo'
 import * as socialNetworks from '~/pages/editor/features/social-networks'
 import { AddDialog, EditDialog } from '~/pages/editor/features/social-networks'
 import { useAutoResizableField } from './lib/react'
-import { Plus } from 'lucide-react'
 
 const Photo = () => {
   const inputId = useId()

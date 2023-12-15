@@ -1,2 +1,2 @@
-export * from './edit-dialog'
 export * from './add-dialog'
+export * from './edit-dialog'
