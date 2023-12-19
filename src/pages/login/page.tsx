@@ -154,7 +154,7 @@ export const LoginPage = () => {
           </CardFooter>
         </div>
         <div className="flex flex-col items-center mt-4 gap-4">
-          <Anchor to={routes.auth.resetPassword} className="w-fit">
+          <Anchor to={routes.auth.login} className="w-fit">
             I forgot my password
           </Anchor>
           <span className="text-sm">
