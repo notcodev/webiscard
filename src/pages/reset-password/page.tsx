@@ -3,7 +3,7 @@ import { useUnit } from 'effector-react'
 import { CheckIcon } from 'lucide-react'
 import { FormEventHandler, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { AuthLayout } from 'src/entites/layouts'
+import { AuthLayout } from '~/entites/layouts'
 import { useTimer } from '~/shared/lib/react'
 import {
   Alert,
