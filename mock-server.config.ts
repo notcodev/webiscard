@@ -295,6 +295,39 @@ const mockServerConfig: MockServerConfig = {
           },
         ],
       },
+      {
+        path: '/card',
+        method: 'get',
+        routes: [
+          {
+            data: {
+              username: 'slmv_e',
+              name: 'Erik',
+              description: 'Some description',
+              profilePicture: {
+                filename: null,
+                size: 'md',
+              },
+              buttons: [],
+              background: {
+                type: 'gradient',
+                value: 'linear-gradient(90deg,#FAD961 0%,#F76B1C 100%)',
+              },
+            },
+          },
+        ],
+      },
+      {
+        path: '/upload-image',
+        method: 'post',
+        routes: [
+          {
+            data: {
+              filename: '1.jpeg',
+            },
+          },
+        ],
+      },
     ],
   },
 }

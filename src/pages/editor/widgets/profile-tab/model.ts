@@ -8,6 +8,6 @@ username.$editing.reset(profileTabClosed)
 
 sample({
   clock: profileTabClosed,
-  source: username.$current,
+  source: username.$lastValue,
   target: username.field.$value,
 })

@@ -1,27 +1,29 @@
 import { useList, useUnit } from 'effector-react'
-import { Plus } from 'lucide-react'
-import { ChangeEvent, PropsWithChildren, useId } from 'react'
+import { LinkIcon, Loader2, Plus } from 'lucide-react'
+import { or } from 'patronum'
+import { PropsWithChildren, useId, useState } from 'react'
 import { BusinessCard, socialNetworkConfig } from '~/entites/business-card'
-import * as background from '~/pages/editor/features/background'
-import * as description from '~/pages/editor/features/description'
-import * as name from '~/pages/editor/features/name'
-import * as photo from '~/pages/editor/features/photo'
-import * as socialNetworks from '~/pages/editor/features/social-networks'
 import { AddDialog, EditDialog } from '~/pages/editor/features/social-networks'
+import { publishCardFx, uploadImageFx } from '~/shared/api'
+import { createImageUploader } from '~/shared/lib/react'
+import * as background from '../../features/background'
+import * as description from '../../features/description'
+import * as name from '../../features/name'
+import * as photo from '../../features/photo'
+import * as publish from '../../features/publish'
+import * as socialNetworks from '../../features/social-networks'
+import * as username from '../../features/username'
 import { useAutoResizableField } from './lib/react'
 
 const Photo = () => {
   const inputId = useId()
-  const { imageUrl, size } = useUnit({
-    size: photo.$size,
-    imageUrl: photo.$imageUrl,
+  const [size, imageSource] = useUnit([photo.$size, photo.$source])
+  const imageUploaded = useUnit(photo.imagePrepared)
+
+  const { onChange } = createImageUploader({
+    onUploaded: imageUploaded,
+    maxSize: 8e6,
   })
-
-  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files === null || event.target.files.length === 0) return
-
-    photo.fileChanged(event.target.files.item(0))
-  }
 
   return (
     <BusinessCard.PhotoContainer
@@ -30,14 +32,15 @@ const Photo = () => {
       asChild
     >
       <label htmlFor={inputId}>
-        {!imageUrl ? (
+        {!imageSource ? (
           <span className="text-sm text-muted-foreground text-center group-hover:text-accent-foreground leading-tight">
             Add <br /> photo
           </span>
         ) : (
-          <BusinessCard.Photo src={imageUrl} />
+          <BusinessCard.Photo src={imageSource} />
         )}
         <input
+          key={imageSource}
           className="hidden"
           id={inputId}
           title=""
@@ -86,13 +89,13 @@ const Description = () => {
   )
 }
 
-const CardWrapper = ({ children }: PropsWithChildren) => {
+const Container = ({ children }: PropsWithChildren) => {
   const bg = useUnit(background.$current)
 
   return (
     <div
-      className="flex justify-center items-center w-full min-h-screen"
-      style={{ background: bg ?? 'hsl(var(--muted-foreground))' }}
+      className="flex justify-center items-center w-full min-h-screen bg-cover bg-center relative"
+      style={{ backgroundImage: bg ?? 'hsl(var(--muted-foreground))' }}
     >
       {children}
     </div>
@@ -161,9 +164,66 @@ const SocialNetworks = () => {
   )
 }
 
+const $showLoader = or(uploadImageFx.pending, publishCardFx.pending)
+const ProcessLoader = () => {
+  const imageUploading = useUnit($showLoader)
+
+  return (
+    imageUploading && (
+      <div className="bg-black bg-opacity-40 absolute top-0 left-0 right-0 w-full h-screen flex items-center justify-center">
+        <Loader2 className="text-background h-16 w-16 animate-spin" />
+      </div>
+    )
+  )
+}
+
+const Publish = () => {
+  const [copied, setCopied] = useState(false)
+
+  const lastUsername = useUnit(username.$lastValue)
+  const buttonPressed = useUnit(publish.buttonPressed)
+
+  return (
+    <div className="fixed top-8 flex text-white text-sm font-light">
+      <button
+        onClick={async () => {
+          await navigator.clipboard.writeText(
+            `https://webiscard.ru/c/${lastUsername}`,
+          )
+          setCopied(true)
+        }}
+        onMouseLeave={() => setCopied(false)}
+        className="bg-black bg-opacity-20 px-4 hover:bg-opacity-[35%] transition duration-300 text-white flex gap-2 rounded-l-full items-center"
+      >
+        <LinkIcon className="h-4 w-4" />
+        <div className="overflow-hidden relative h-fit py-2">
+          <span
+            className="leading-none relative block aria-hidden:translate-y-8 transition-transform duration-300"
+            aria-hidden={copied}
+          >
+            webiscard.ru/c/{lastUsername}
+          </span>
+          <span
+            className="leading-none absolute w-full text-center left-0 aria-hidden:-translate-y-8 transition-transform duration-300 top-2"
+            aria-hidden={!copied}
+          >
+            Copied
+          </span>
+        </div>
+      </button>
+      <button
+        onClick={buttonPressed}
+        className="bg-black bg-opacity-[35%] py-2 w-28 hover:bg-opacity-[45%] transition duration-300 rounded-r-full"
+      >
+        Save
+      </button>
+    </div>
+  )
+}
+
 export const PreviewCard = () => {
   return (
-    <CardWrapper>
+    <Container>
       <div className="py-24">
         <BusinessCard>
           <Photo />
@@ -172,6 +232,8 @@ export const PreviewCard = () => {
           <SocialNetworks />
         </BusinessCard>
       </div>
-    </CardWrapper>
+      <Publish />
+      <ProcessLoader />
+    </Container>
   )
 }

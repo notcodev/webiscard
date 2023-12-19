@@ -1,13 +1,11 @@
 import { createRouteView } from 'atomic-router-react'
-import { lazily } from 'react-lazily'
 import { PageLoader } from '~/shared/ui'
-import { authorizedRoute, currentRoute } from './shared/routing'
-
-const { EditorPage } = lazily(() => import('./page'))
+import { EditorPage } from './page'
+import { currentRoute, editorLoadedRoute } from './shared/routing'
 
 export const EditorRoute = {
   view: createRouteView({
-    route: authorizedRoute,
+    route: editorLoadedRoute,
     view: EditorPage,
     otherwise: PageLoader,
   }),

@@ -1,13 +1,15 @@
-import { attach, createEvent, createStore, sample } from 'effector'
+import { createEvent, createStore, sample } from 'effector'
+import { attach } from 'effector/compat'
 import { and, equals, not } from 'patronum'
 import * as api from '~/shared/api'
 import { createField } from '~/shared/lib/effector'
 import { UsernameValidationError, UsernameValidator } from '~/shared/validators'
+import { getCardDraftFx } from '../../shared/api'
 
-const updateUsernameFx = attach({ effect: api.updateUsernameFx })
+const updateCardFx = attach({ effect: api.updateCardFx })
 
-export const fieldModeChanged = createEvent()
-const confirmButtonPressed = createEvent()
+export const editingStarted = createEvent()
+export const editingCompleted = createEvent()
 
 export type FieldError = UsernameValidationError | 'exist'
 
@@ -15,65 +17,63 @@ export const field = createField<string, FieldError>({
   defaultValue: '',
   validate: {
     type: 'class',
-    on: confirmButtonPressed,
+    on: editingCompleted,
     Class: UsernameValidator,
   },
   reset: {
-    error: confirmButtonPressed,
+    error: editingCompleted,
   },
 })
 
-export const $current = createStore('')
+export const $lastValue = createStore('')
 export const $editing = createStore<boolean>(false)
-export const $fieldDisabled = updateUsernameFx.pending
+export const $fieldDisabled = updateCardFx.pending
 
 sample({
-  clock: fieldModeChanged,
-  filter: $editing,
-  target: confirmButtonPressed,
+  clock: getCardDraftFx.doneData,
+  fn: ({ username }) => username,
+  target: [field.$value, $lastValue],
 })
 
-sample({
-  clock: fieldModeChanged,
-  filter: not($editing),
-  fn() {
-    return true
-  },
-  target: $editing,
-})
+$editing.on(editingStarted, () => true)
+$editing.on(updateCardFx.done, () => false)
 
 sample({
-  clock: confirmButtonPressed,
+  clock: editingCompleted,
   source: field.$value,
-  filter: and($editing, not($fieldDisabled), equals(field.$error, null)),
+  filter: and(
+    $editing,
+    not($fieldDisabled),
+    equals(field.$error, null),
+    not(equals(field.$value, $lastValue)),
+  ),
   fn(username) {
     return { username }
   },
-  target: updateUsernameFx,
+  target: updateCardFx,
+})
+
+sample({
+  clock: editingCompleted,
+  filter: equals(field.$value, $lastValue),
+  fn: () => false,
+  target: $editing,
 })
 
 /* Success */
 
 sample({
-  clock: updateUsernameFx.done,
-  fn() {
-    return false
-  },
-  target: $editing,
-})
-
-sample({
-  clock: updateUsernameFx.done,
+  clock: updateCardFx.done,
   source: field.$value,
-  target: $current,
+  target: $lastValue,
 })
 
 /* Catching Errors */
 
 sample({
-  clock: updateUsernameFx.fail,
+  clock: updateCardFx.fail,
   filter({ error }) {
-    return error.status === 409
+    return error.json?.code === 'FST_USERNAME_EXIST'
   },
   fn(): FieldError {
     return 'exist'

@@ -12,12 +12,13 @@ export const routes = {
   auth: {
     login: createRoute(),
     signup: createRoute(),
-    resetPassword: createRoute(),
-    updatePassword: createRoute(),
+    // resetPassword: createRoute(),
+    // updatePassword: createRoute(),
   },
   settings: createRoute(),
   editor: createRoute(),
   view: createRoute<{ username: string }>(),
+  notFound: createRoute(),
 }
 
 export const controls = createRouterControls()
@@ -29,10 +30,6 @@ export const router = createHistoryRouter({
       route: routes.home,
     },
     {
-      path: '/:username',
-      route: routes.view,
-    },
-    {
       path: '/login',
       route: routes.auth.login,
     },
@@ -40,14 +37,14 @@ export const router = createHistoryRouter({
       path: '/signup',
       route: routes.auth.signup,
     },
-    {
-      path: '/reset-password',
-      route: routes.auth.resetPassword,
-    },
-    {
-      path: '/update-password',
-      route: routes.auth.updatePassword,
-    },
+    // {
+    //   path: '/reset-password',
+    //   route: routes.auth.resetPassword,
+    // },
+    // {
+    //   path: '/update-password',
+    //   route: routes.auth.updatePassword,
+    // },
     {
       path: '/settings',
       route: routes.settings,
@@ -55,6 +52,14 @@ export const router = createHistoryRouter({
     {
       path: '/editor',
       route: routes.editor,
+    },
+    {
+      path: '/404',
+      route: routes.notFound,
+    },
+    {
+      path: '/c/:username',
+      route: routes.view,
     },
   ],
   controls,

@@ -1,6 +1,7 @@
 import { useUnit } from 'effector-react'
 import { CheckIcon } from 'lucide-react'
 import { useId } from 'react'
+import { createImageUploader } from '~/shared/lib/react'
 import { Button, Label } from '~/shared/ui'
 import * as background from '../../features/background'
 
@@ -24,7 +25,7 @@ interface GradientPresetProps {
 }
 
 const GradientPreset = ({ gradient }: GradientPresetProps) => {
-  const changed = useUnit(background.changed)
+  const changed = useUnit(background.gradientSelected)
   const bg = useUnit(background.$current)
 
   return (
@@ -40,27 +41,41 @@ const GradientPreset = ({ gradient }: GradientPresetProps) => {
   )
 }
 
-export const BackgroundTab = () => {
+const UploadBackground = () => {
   const inputId = useId()
+  const imageUploaded = useUnit(background.imagePrepared)
+  const currentBackground = useUnit(background.$current)
+
+  const { onChange } = createImageUploader({
+    onUploaded: imageUploaded,
+    maxSize: 8e6,
+  })
 
   return (
-    <div className="mt-8 flex flex-col gap-6">
-      <div className="flex flex-col gap-3">
-        <Label htmlFor={inputId}>Upload your own background</Label>
-        <Button className="cursor-pointer" size="lg" asChild>
-          <label htmlFor={inputId}>
-            Choose file
-            <input
-              className="hidden"
-              id={inputId}
-              title=""
-              type="file"
-              accept="image/jpeg, image/png, image/heic"
-            />
-          </label>
-        </Button>
-      </div>
+    <div className="flex flex-col gap-3">
+      <Label htmlFor={inputId}>Upload your own background</Label>
+      <Button className="cursor-pointer" size="lg" asChild>
+        <label htmlFor={inputId}>
+          Choose file
+          <input
+            key={currentBackground}
+            className="hidden"
+            id={inputId}
+            title=""
+            type="file"
+            accept="image/jpeg, image/png, image/heic"
+            onChange={onChange}
+          />
+        </label>
+      </Button>
+    </div>
+  )
+}
 
+export const BackgroundTab = () => {
+  return (
+    <div className="mt-8 flex flex-col gap-6">
+      <UploadBackground />
       <div className="flex flex-col gap-3">
         <Label>Gradients</Label>
         <div className="flex flex-wrap gap-3">

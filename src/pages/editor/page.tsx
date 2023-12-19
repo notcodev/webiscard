@@ -35,6 +35,15 @@ const EditorTabs = () => {
   )
 }
 
+const SideBar = () => {
+  return (
+    <div className="hidden left-0 top-0 bottom-0 fixed md:flex md:border-r bg-background flex-col w-full md:w-[384px] p-6 h-full overflow-scroll">
+      <Header />
+      <EditorTabs />
+    </div>
+  )
+}
+
 export const EditorPage = () => {
   useEffect(() => pageUnmounted, [])
 
@@ -43,10 +52,7 @@ export const EditorPage = () => {
       <div className="md:pl-[384px]">
         <PreviewCard />
       </div>
-      <div className="hidden left-0 top-0 bottom-0 fixed md:flex md:border-r bg-background flex-col w-full md:w-[384px] p-6 h-full overflow-scroll">
-        <Header />
-        <EditorTabs />
-      </div>
+      <SideBar />
     </main>
   )
 }

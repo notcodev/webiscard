@@ -29,6 +29,7 @@ export interface SocialNetworkConfig {
     hint?: string
     prefix?: string
   }
+  getLink: (value: string) => string
 }
 
 const telephonePlaceholder = 'Enter a phone number'
@@ -46,6 +47,9 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
       placeholder: usernamePlaceholder,
       prefix: 'm.me/',
     },
+    getLink(value: string) {
+      return `https://m.me/${value}`
+    },
   },
   [SocialNetwork.WHATSAPP]: {
     name: 'WhatsApp',
@@ -55,6 +59,11 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
       type: 'tel',
       placeholder: telephonePlaceholder,
       hint: telephoneHint,
+    },
+    getLink(value: string) {
+      const phone = value.replace('+', '')
+
+      return `https://api.whatsapp.com/send/?phone=${phone}&text&type=phone_number&app_absent=0`
     },
   },
   [SocialNetwork.VKONTAKTE]: {
@@ -66,6 +75,9 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
       placeholder: usernamePlaceholder,
       prefix: 'vk.com/',
     },
+    getLink(value: string) {
+      return `https://vk.com/${value}`
+    },
   },
   [SocialNetwork.VIBER]: {
     name: 'Viber',
@@ -75,6 +87,11 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
       type: 'tel',
       placeholder: telephonePlaceholder,
       hint: telephoneHint,
+    },
+    getLink(value: string) {
+      const phone = value.replace('+', '%2B')
+
+      return `viber://contact?number=${phone}`
     },
   },
   [SocialNetwork.OK]: {
@@ -86,6 +103,9 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
       placeholder: usernamePlaceholder,
       prefix: 'ok.ru/',
     },
+    getLink(value: string) {
+      return `https://ok.ru/${value}`
+    },
   },
   [SocialNetwork.SKYPE]: {
     name: 'Skype',
@@ -94,6 +114,9 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
     input: {
       type: 'text',
       placeholder: usernamePlaceholder,
+    },
+    getLink(value: string) {
+      return `skype:${value}?chat`
     },
   },
   [SocialNetwork.TELEGRAM]: {
@@ -105,15 +128,20 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
       placeholder: usernamePlaceholder,
       prefix: 't.me/',
     },
+    getLink(value: string) {
+      return `https://t.me/${value}`
+    },
   },
   [SocialNetwork.INSTAGRAM]: {
     name: 'Instagram',
     icon: Instagram,
-
     gradient: 'linear-gradient(180deg,#f39750,#ec3975)',
     input: {
       type: 'text',
       placeholder: usernamePlaceholder,
+    },
+    getLink(value: string) {
+      return `https://instagram.com/${value}`
     },
   },
   [SocialNetwork.X]: {
@@ -125,6 +153,9 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
       placeholder: usernamePlaceholder,
       prefix: 'x.com/',
     },
+    getLink(value: string) {
+      return `https://x.com/${value}`
+    },
   },
   [SocialNetwork.EMAIL]: {
     name: 'Email',
@@ -133,6 +164,9 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
     input: {
       type: 'email',
       placeholder: 'Enter your email address',
+    },
+    getLink(value: string) {
+      return `mailto:${value}`
     },
   },
   [SocialNetwork.FACEBOOK]: {
@@ -144,6 +178,9 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
       placeholder: usernamePlaceholder,
       prefix: 'fb.me/',
     },
+    getLink(value: string) {
+      return `https://fb.me/${value}`
+    },
   },
   [SocialNetwork.TELEPHONE]: {
     name: 'Telephone',
@@ -153,6 +190,9 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
       type: 'tel',
       placeholder: telephonePlaceholder,
       hint: telephoneHint,
+    },
+    getLink(value: string) {
+      return `tel:${value}`
     },
   },
   [SocialNetwork.YOUTUBE]: {
@@ -164,6 +204,9 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
       placeholder: usernamePlaceholder,
       prefix: 'youtube.com/',
     },
+    getLink(value: string) {
+      return `https://youtube.com/${value}`
+    },
   },
   [SocialNetwork.BEHANCE]: {
     name: 'Behance',
@@ -172,6 +215,9 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
     input: {
       type: 'text',
       placeholder: usernamePlaceholder,
+    },
+    getLink(value: string) {
+      return `https://www.behance.net/${value}`
     },
   },
   [SocialNetwork.SNAPCHAT]: {
@@ -183,6 +229,9 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
       placeholder: usernamePlaceholder,
       prefix: 'snapchat.com/add/',
     },
+    getLink(value: string) {
+      return `https://snapchat.com/add/${value}`
+    },
   },
   [SocialNetwork.DRIBBBLE]: {
     name: 'Dribbble',
@@ -191,6 +240,9 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
     input: {
       type: 'text',
       placeholder: usernamePlaceholder,
+    },
+    getLink(value: string) {
+      return `https://dribbble.com/${value}`
     },
   },
   [SocialNetwork.LINKEDIN]: {
@@ -202,6 +254,9 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
       placeholder: usernamePlaceholder,
       prefix: 'linkedin.com/user/',
     },
+    getLink(value: string) {
+      return `https://linkedin.com/user/${value}`
+    },
   },
   [SocialNetwork.GITHUB]: {
     name: 'GitHub',
@@ -210,6 +265,9 @@ export const socialNetworkConfig: Record<SocialNetwork, SocialNetworkConfig> = {
     input: {
       type: 'text',
       placeholder: usernamePlaceholder,
+    },
+    getLink(value: string) {
+      return `https://github.com/${value}`
     },
   },
 }

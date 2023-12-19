@@ -1,17 +1,14 @@
 import { useUnit } from 'effector-react'
-import {
-  ChangeEvent,
-  forwardRef,
-  MouseEventHandler,
-  useEffect,
-  useId,
-} from 'react'
+import { forwardRef, useEffect, useId } from 'react'
+import { ProfilePictureSize } from '~/shared/api'
+import { createImageUploader } from '~/shared/lib/react'
 import {
   Button,
   Field,
   Input,
   InputProps,
   Label,
+  PrefixInput,
   Slider,
   Textarea,
 } from '~/shared/ui'
@@ -19,17 +16,18 @@ import * as description from '../../features/description'
 import * as name from '../../features/name'
 import * as photo from '../../features/photo'
 import * as username from '../../features/username'
-import { PrefixInput } from '../../shared/ui'
 import { profileTabClosed } from './model'
 
-interface PageLinkEditInputProps extends InputProps {
-  editMode: boolean
-  changeMode: MouseEventHandler<HTMLButtonElement>
-}
+const PageLinkEditInput = forwardRef<HTMLInputElement, InputProps>(
+  ({ className, disabled, ...props }, ref) => {
+    const isEditing = useUnit(username.$editing)
 
-const PageLinkEditInput = forwardRef<HTMLInputElement, PageLinkEditInputProps>(
-  ({ className, disabled, changeMode, editMode, ...props }, ref) => {
-    const fieldDisabled = !editMode || disabled
+    const [editingStarted, editingCompleted] = useUnit([
+      username.editingStarted,
+      username.editingCompleted,
+    ])
+
+    const fieldDisabled = !isEditing || disabled
 
     return (
       <div className="flex gap-2">
@@ -37,13 +35,19 @@ const PageLinkEditInput = forwardRef<HTMLInputElement, PageLinkEditInputProps>(
           type="text"
           className={className}
           disabled={fieldDisabled}
-          prefix="webiscard.github.io/"
+          prefix="webiscard.github.io/c/"
           ref={ref}
           {...props}
         />
-        <Button onClick={changeMode} disabled={disabled}>
-          {!editMode ? 'Edit' : 'Confirm'}
-        </Button>
+        {!isEditing ? (
+          <Button onClick={() => editingStarted()} disabled={disabled}>
+            Edit
+          </Button>
+        ) : (
+          <Button onClick={() => editingCompleted()} disabled={fieldDisabled}>
+            Confirm
+          </Button>
+        )}
       </div>
     )
   },
@@ -59,10 +63,9 @@ const usernameErrorText: Record<username.FieldError, string> = {
 }
 
 const PageLinkField = () => {
-  const { value, error, editMode, disabled } = useUnit({
+  const { value, error, disabled } = useUnit({
     value: username.field.$value,
     error: username.field.$error,
-    editMode: username.$editing,
     disabled: username.$fieldDisabled,
   })
 
@@ -78,10 +81,7 @@ const PageLinkField = () => {
       disabled={disabled}
       asChild
     >
-      <PageLinkEditInput
-        editMode={editMode}
-        changeMode={() => username.fieldModeChanged()}
-      />
+      <PageLinkEditInput />
     </Field>
   )
 }
@@ -139,16 +139,16 @@ const DescriptionField = () => {
 }
 
 const captionText = {
-  [photo.Size.SMALL]: 'S',
-  [photo.Size.MEDIUM]: 'M',
-  [photo.Size.LARGE]: 'L',
+  [ProfilePictureSize.SMALL]: 'S',
+  [ProfilePictureSize.MEDIUM]: 'M',
+  [ProfilePictureSize.LARGE]: 'L',
 }
 
 const PhotoSizeCaption = ({
   size,
   active,
 }: {
-  size: photo.Size
+  size: ProfilePictureSize
   active: boolean
 }) => {
   return (
@@ -164,7 +164,11 @@ const PhotoSizeCaption = ({
 
 const PhotoSizeSlider = () => {
   const currentSize = useUnit(photo.$size)
-  const ascendingSizes = [photo.Size.SMALL, photo.Size.MEDIUM, photo.Size.LARGE]
+  const ascendingSizes = [
+    ProfilePictureSize.SMALL,
+    ProfilePictureSize.MEDIUM,
+    ProfilePictureSize.LARGE,
+  ]
 
   return (
     <>
@@ -188,12 +192,13 @@ const PhotoSizeSlider = () => {
 
 const PhotoField = () => {
   const inputId = useId()
+  const imageUploaded = useUnit(photo.imagePrepared)
+  const imageSource = useUnit(photo.$source)
 
-  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files === null || event.target.files.length === 0) return
-
-    photo.fileChanged(event.target.files.item(0))
-  }
+  const { onChange } = createImageUploader({
+    onUploaded: imageUploaded,
+    maxSize: 8e6,
+  })
 
   return (
     <div className="flex flex-col gap-3">
@@ -202,6 +207,7 @@ const PhotoField = () => {
         <label htmlFor={inputId}>
           Upload photo
           <input
+            key={imageSource}
             className="hidden"
             id={inputId}
             title=""

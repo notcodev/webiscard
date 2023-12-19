@@ -103,7 +103,7 @@ sample({
 sample({
   clock: signUpFx.fail,
   filter({ error }) {
-    return error.json.error === 'email_exist'
+    return error.json?.code === 'FST_EMAIL_EXIST'
   },
   fn(): EmailError {
     return 'exist'
@@ -114,7 +114,7 @@ sample({
 sample({
   clock: signUpFx.fail,
   filter({ error }) {
-    return error.json.error === 'username_exist'
+    return error.json?.code === 'FST_USERNAME_EXIST'
   },
   fn(): UsernameError {
     return 'exist'

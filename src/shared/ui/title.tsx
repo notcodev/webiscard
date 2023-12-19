@@ -5,7 +5,7 @@ import { cn } from '~/shared/lib/shadcn'
 const titleVariants = cva('', {
   variants: {
     order: {
-      1: 'text-4xl font-extrabold',
+      1: 'text-4xl font-semibold',
       2: 'text-3xl font-semibold',
       3: 'text-2xl font-semibold',
       4: 'text-xl font-semibold',
