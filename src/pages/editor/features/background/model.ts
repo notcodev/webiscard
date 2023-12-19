@@ -1,6 +1,6 @@
 import { attach, createEvent, createStore, sample } from 'effector'
 import * as api from '~/shared/api'
-import { Background } from '~/shared/api'
+import { Background, BackgroundType } from '~/shared/api'
 import { getImageUrl } from '~/shared/utils'
 import { getCardDraftFx } from '../../shared/api'
 
@@ -53,9 +53,9 @@ sample({
   fn({ filename }) {
     return {
       background: {
-        type: 'CustomImage',
-        value: getImageUrl(filename),
-      } as Background,
+        type: 'CustomImage' as BackgroundType,
+        value: `url(${getImageUrl(filename)})`,
+      },
     }
   },
   target: updateCardFx,

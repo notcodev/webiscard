@@ -4,6 +4,7 @@ import { Description } from './description'
 import { Name } from './name'
 import { Photo, PhotoContainer } from './photo'
 import { SocialNetwork } from './social-network'
+import { Background } from './background'
 
 export const BusinessCard = ({
   className,
@@ -23,6 +24,7 @@ export const BusinessCard = ({
   )
 }
 
+BusinessCard.Background = Background
 BusinessCard.PhotoContainer = PhotoContainer
 BusinessCard.Photo = Photo
 BusinessCard.Name = Name

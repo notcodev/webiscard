@@ -1,23 +1,12 @@
 import { Link } from 'atomic-router-react'
 import { useUnit } from 'effector-react'
 import { BusinessCard, socialNetworkConfig } from '~/entites/business-card'
-import { Background } from '~/shared/api'
 import { $cardData } from './model'
 
 export const ViewPage = () => {
   const cardData = useUnit($cardData)
   const { name, socialNetworks, profilePicture, background, description } =
     cardData!
-
-  const getBackgroundImage = (background: Background | null) => {
-    if (!background) return 'hsl(var(--muted-foreground))'
-
-    if (background.type === 'Gradient') return background.value
-
-    return `url(${background.value})`
-  }
-
-  console.log(cardData)
 
   const getPhotoSrc = (filename: string | null) => {
     if (!filename) return ''
@@ -26,11 +15,8 @@ export const ViewPage = () => {
   }
 
   return (
-    <div
-      className="flex justify-center items-center w-full min-h-screen bg-cover bg-center"
-      style={{
-        backgroundImage: getBackgroundImage(background),
-      }}
+    <BusinessCard.Background
+      backgroundValue={background ? background.value : null}
     >
       <div className="py-24">
         <BusinessCard>
@@ -52,6 +38,6 @@ export const ViewPage = () => {
           </div>
         </BusinessCard>
       </div>
-    </div>
+    </BusinessCard.Background>
   )
 }

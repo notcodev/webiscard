@@ -198,7 +198,7 @@ export interface SocialNetworkButton {
   value: string
 }
 
-type BackgroundType = 'Gradient' | 'CustomImage'
+export type BackgroundType = 'Gradient' | 'CustomImage'
 
 export interface Background {
   type: BackgroundType

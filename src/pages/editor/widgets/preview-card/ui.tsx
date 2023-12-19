@@ -89,16 +89,13 @@ const Description = () => {
   )
 }
 
-const Container = ({ children }: PropsWithChildren) => {
+const Background = ({ children }: PropsWithChildren) => {
   const bg = useUnit(background.$current)
 
   return (
-    <div
-      className="flex justify-center items-center w-full min-h-screen bg-cover bg-center relative"
-      style={{ backgroundImage: bg ?? 'hsl(var(--muted-foreground))' }}
-    >
+    <BusinessCard.Background backgroundValue={bg}>
       {children}
-    </div>
+    </BusinessCard.Background>
   )
 }
 
@@ -223,7 +220,7 @@ const Publish = () => {
 
 export const PreviewCard = () => {
   return (
-    <Container>
+    <Background>
       <div className="py-24">
         <BusinessCard>
           <Photo />
@@ -234,6 +231,6 @@ export const PreviewCard = () => {
       </div>
       <Publish />
       <ProcessLoader />
-    </Container>
+    </Background>
   )
 }

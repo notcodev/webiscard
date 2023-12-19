@@ -24,7 +24,7 @@ export const pageUnmounted = createEvent()
 export const TIMEOUT_SECONDS = 5
 export const timeoutRedirect = createTimeoutRedirect({
   route: routes.auth.login,
-  timeout: TIMEOUT_SECONDS,
+  timeout: TIMEOUT_SECONDS * 1000,
   clearOn: pageUnmounted,
 })
 
