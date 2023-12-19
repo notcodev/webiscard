@@ -1,4 +1,5 @@
 import { createEffect } from 'effector'
+import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import wretch, { WretchResponse } from 'wretch'
 import QueryStringAddon from 'wretch/addons/queryString'
 
@@ -6,11 +7,22 @@ const api = wretch(import.meta.env.VITE_API_URL + '/api')
   .options({ credentials: 'include', mode: 'cors' })
   .addon(QueryStringAddon)
 
+export interface FastifyError<
+  StatusCode extends StatusCodes,
+  Code extends `FST_${Uppercase<string>}`,
+  Error extends ReasonPhrases,
+> {
+  readonly statusCode: StatusCode
+  readonly code: Code
+  readonly error: Error
+  readonly message: string
+}
+
 type WretchError<ErrorBody> = Error & {
   status: number
   response: WretchResponse
   text: string
-  json: ErrorBody
+  json?: ErrorBody
 }
 
 /* Models */
@@ -22,16 +34,18 @@ export interface User {
 
 /* Session */
 
-interface GetSessionError {
-  error: 'unauthorized'
-}
+type GetSessionError = FastifyError<
+  StatusCodes.UNAUTHORIZED,
+  'FST_UNAUTHORIZED',
+  ReasonPhrases.UNAUTHORIZED
+>
 
 export const getSessionFx = createEffect<
   void,
   User,
   WretchError<GetSessionError>
 >(() => {
-  return api.url('/session').get().json<User>()
+  return api.url('/v1/session').get().json<User>()
 })
 
 /* Sign in */
@@ -42,13 +56,21 @@ interface SignIn {
   rememberMe: boolean
 }
 
-export interface SignInError {
-  error: 'invalid_credentials'
-}
+type SignInError =
+  | FastifyError<
+      StatusCodes.FORBIDDEN,
+      'FST_INVALID_CREDENTIALS',
+      ReasonPhrases.FORBIDDEN
+    >
+  | FastifyError<
+      StatusCodes.NOT_FOUND,
+      'FST_USER_NOT_FOUND',
+      ReasonPhrases.NOT_FOUND
+    >
 
 export const signInFx = createEffect<SignIn, User, WretchError<SignInError>>(
   (form) => {
-    return api.url('/signin').post(form).json<User>()
+    return api.url('/v1/login').post(form).json<User>()
   },
 )
 
@@ -60,13 +82,21 @@ interface SignUp {
   username: string
 }
 
-interface SignUpError {
-  error: 'email_exist' | 'username_exist'
-}
+type SignUpError =
+  | FastifyError<
+      StatusCodes.CONFLICT,
+      'FST_EMAIL_EXIST',
+      ReasonPhrases.CONFLICT
+    >
+  | FastifyError<
+      StatusCodes.CONFLICT,
+      'FST_USERNAME_EXIST',
+      ReasonPhrases.CONFLICT
+    >
 
 export const signUpFx = createEffect<SignUp, null, WretchError<SignUpError>>(
   (form) => {
-    return api.url('/signup').post(form).json()
+    return api.url('/v1/signup').post(form).json()
   },
 )
 
@@ -127,25 +157,18 @@ export const updatePasswordFx = createEffect<
   return api.url('/users/me/password').put(body).json()
 })
 
-/* Update username */
+/* Card */
 
-interface UpdateUsername {
-  username: string
+export enum ProfilePictureSize {
+  SMALL = 'sm',
+  MEDIUM = 'md',
+  LARGE = 'lg',
 }
 
-interface UpdateUsernameError {
-  error: 'exist'
+interface ProfilePicture {
+  size: ProfilePictureSize
+  filename: string
 }
-
-export const updateUsernameFx = createEffect<
-  UpdateUsername,
-  null,
-  WretchError<UpdateUsernameError>
->((body) => {
-  return api.url('/users/me/username').put(body).json()
-})
-
-/* Social Network */
 
 export enum SocialNetwork {
   MESSENGER = 'messenger',
@@ -174,3 +197,93 @@ export interface SocialNetworkButton {
   enabled: boolean
   value: string
 }
+
+type BackgroundType = 'Gradient' | 'CustomImage'
+
+export interface Background {
+  type: BackgroundType
+  value: string
+}
+
+type UpdateCard = Partial<{
+  username: string
+  name: string
+  description: string
+  profilePicture: Partial<ProfilePicture>
+  socialNetworks: SocialNetworkButton[]
+  background: Background
+}>
+
+type UpdateCardError = FastifyError<
+  StatusCodes.CONFLICT,
+  'FST_USERNAME_EXIST',
+  ReasonPhrases.CONFLICT
+>
+
+export const updateCardFx = createEffect<
+  UpdateCard,
+  null,
+  WretchError<UpdateCardError>
+>((card) => {
+  return api.url('/v1/card').patch(card).json()
+})
+
+export interface UploadImage {
+  imageBase64: string
+}
+
+interface Image {
+  filename: string
+}
+
+export const uploadImageFx = createEffect<
+  UploadImage,
+  Image,
+  WretchError<unknown>
+>(({ imageBase64 }) => {
+  return api.url('/v1/upload-image').post({ imageBase64 }).json()
+})
+
+interface Card {
+  username: string
+  name: string
+  description: string
+  profilePicture: {
+    size: ProfilePictureSize
+    filename: string | null
+  }
+  socialNetworks: SocialNetworkButton[]
+  background: {
+    type: BackgroundType
+    value: string
+  } | null
+  isPublished: boolean
+}
+
+export const getCardDraftFx = createEffect<void, Card, WretchError<unknown>>(
+  () => {
+    return api.get('/v1/card').json()
+  },
+)
+
+interface GetCard {
+  username: string
+}
+
+export type GetCardPublicError = FastifyError<
+  StatusCodes.NOT_FOUND,
+  'FST_CARD_NOT_FOUND',
+  ReasonPhrases.NOT_FOUND
+>
+
+export const getCardPublicFx = createEffect<
+  GetCard,
+  Omit<Card, 'username' | 'isPublished'>,
+  WretchError<unknown>
+>(({ username }) => {
+  return api.get(`/v1/card/${username}`).json()
+})
+
+export const publishCardFx = createEffect(() => {
+  return api.url('/v1/publish-card').post().json()
+})
