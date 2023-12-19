@@ -20,7 +20,7 @@ import {
   CardTitle,
   Field,
   InputProps,
-  PasswordInput,
+  PasswordInput, PrefixInput
 } from '~/shared/ui'
 import {
   $formDisabled,
@@ -95,35 +95,6 @@ const PasswordField = () => {
   )
 }
 
-const PageLinkInput = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, error, disabled, ...props }, ref) => {
-    return (
-      <div
-        className={cn(
-          'peer flex items-center h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-within:ring-1 focus-within:ring-ring aria-disabled:cursor-not-allowed aria-disabled:opacity-50',
-          error ? 'border-red-500 focus-within:ring-0' : null,
-          className,
-        )}
-        aria-disabled={disabled}
-      >
-        <span className={error ? 'text-red-500' : undefined}>
-          webiscard.github.io/
-        </span>
-        <input
-          type="text"
-          ref={ref}
-          className={cn(
-            'flex w-full bg-transparent transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-ring disabled:cursor-not-allowed',
-            error ? 'text-red-500 placeholder:text-red-500' : null,
-          )}
-          disabled={disabled}
-          {...props}
-        />
-      </div>
-    )
-  },
-)
-
 const usernameErrorText = {
   empty: 'Page link field cannot be empty',
   exist: 'This page already exist',
@@ -149,12 +120,11 @@ const PageLinkField = () => {
       placeholder="username"
       required
       label="Link to your page"
-      id="page-link"
       error={error ? usernameErrorText[error] : null}
       disabled={disabled}
       asChild
     >
-      <PageLinkInput />
+      <PrefixInput prefix="webiscard.github.io/" />
     </Field>
   )
 }

@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 import { cn } from '~/shared/lib/shadcn'
-import { InputProps } from '~/shared/ui'
+import { InputProps } from '~/shared/ui/index.ts'
 
 export const PrefixInput = forwardRef<HTMLInputElement, InputProps>(
   ({ className, error, prefix, disabled, ...props }, ref) => {

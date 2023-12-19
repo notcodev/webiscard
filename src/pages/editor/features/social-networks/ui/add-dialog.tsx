@@ -3,7 +3,6 @@ import { ReactElement, useId, useRef, useState } from 'react'
 import { match } from 'ts-pattern'
 import { BusinessCard, socialNetworkConfig } from '~/entites/business-card'
 import * as socialNetworks from '~/pages/editor/features/social-networks'
-import { PrefixInput } from '~/pages/editor/shared/ui'
 import { SocialNetwork } from '~/shared/api'
 import {
   Button,
@@ -15,7 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  Label,
+  Label, PrefixInput
 } from '~/shared/ui'
 import { SocialNetworkIcon } from '../../../entities/social-network-icon'
 

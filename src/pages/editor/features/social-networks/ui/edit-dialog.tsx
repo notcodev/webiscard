@@ -1,7 +1,6 @@
 import { useUnit } from 'effector-react'
 import { ReactElement, useId, useRef } from 'react'
 import { SocialNetworkConfig } from '~/entites/business-card'
-import { PrefixInput } from '~/pages/editor/shared/ui'
 import { SocialNetworkButton } from '~/shared/api'
 import {
   Button,
@@ -13,8 +12,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  Label,
-  Switch,
+  Label, PrefixInput,
+  Switch
 } from '~/shared/ui'
 import { SocialNetworkIcon } from '../../../entities/social-network-icon'
 import { buttonsApi } from '../model'
