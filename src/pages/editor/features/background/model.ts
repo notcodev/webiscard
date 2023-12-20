@@ -1,14 +1,14 @@
 import { attach, createEvent, createStore, sample } from 'effector'
 import * as api from '~/shared/api'
-import { Background, BackgroundType } from '~/shared/api'
 import { getImageUrl } from '~/shared/utils'
 import { getCardDraftFx } from '../../shared/api'
+import { ImageKind } from '~/shared/api'
 
 const uploadImageFx = attach({ effect: api.uploadImageFx })
 const updateCardFx = attach({ effect: api.updateCardFx })
 
 export const gradientSelected = createEvent<string>()
-export const imagePrepared = createEvent<string>()
+export const imagePrepared = createEvent<File>()
 
 export const $current = createStore<string | null>(null)
 
@@ -17,9 +17,7 @@ sample({
   fn({ background }) {
     if (!background) return null
 
-    return background.type === 'CustomImage'
-      ? `url(${background.value})`
-      : background.value
+    return background
   },
   target: $current,
 })
@@ -29,7 +27,7 @@ $current.on(gradientSelected, (_, gradient) => gradient)
 sample({
   clock: gradientSelected,
   fn(gradient) {
-    return { background: { type: 'Gradient', value: gradient } as Background }
+    return { background: gradient }
   },
   target: updateCardFx,
 })
@@ -37,7 +35,7 @@ sample({
 sample({
   clock: imagePrepared,
   fn(file) {
-    return { imageBase64: file }
+    return { file, kind: ImageKind.BACKGROUND }
   },
   target: uploadImageFx,
 })
@@ -51,12 +49,7 @@ sample({
 sample({
   clock: uploadImageFx.doneData,
   fn({ filename }) {
-    return {
-      background: {
-        type: 'CustomImage' as BackgroundType,
-        value: `url(${getImageUrl(filename)})`,
-      },
-    }
+    return { background: `url(${getImageUrl(filename)})` }
   },
   target: updateCardFx,
 })

@@ -26,7 +26,7 @@ interface PhotoContainerProps
   asChild?: boolean
 }
 
-export const PhotoContainer = ({
+export const AvatarContainer = ({
   className,
   asChild,
   size,
@@ -42,6 +42,6 @@ export const PhotoContainer = ({
   )
 }
 
-export const Photo = ({ src }: { src: string }) => {
+export const Avatar = ({ src }: { src: string }) => {
   return <img src={src} className="h-full w-full object-cover" alt="avatar" />
 }

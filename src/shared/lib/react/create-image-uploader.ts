@@ -1,35 +1,25 @@
 import { ChangeEvent } from 'react'
 
 interface CreateImageUploader {
-  onUploaded: (result: string) => void
-  maxSize: number
+  onUploaded: (result: File) => void
   onSizeExceeded?: () => void
 }
 
 export const createImageUploader = ({
   onUploaded,
-  maxSize,
   onSizeExceeded,
 }: CreateImageUploader) => {
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files === null || event.target.files.length === 0) return
 
-    const file = event.target.files.item(0)
-    const reader = new FileReader()
+    const file = event.target.files[0]
 
-    reader.addEventListener('load', (event) => {
-      if (!event.target) return
-
-      onUploaded(event.target.result as string)
-    })
-
-    if (!file) return
-    if (file.size > maxSize) {
+    if (file.size > 1024 * 1024 * 4) {
       onSizeExceeded?.()
       return
     }
 
-    reader.readAsDataURL(file)
+    onUploaded(event.target.files[0])
   }
 
   return { onChange }

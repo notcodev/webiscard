@@ -2,10 +2,12 @@ import { createEffect } from 'effector'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import wretch, { WretchResponse } from 'wretch'
 import QueryStringAddon from 'wretch/addons/queryString'
+import FormDataAddon from 'wretch/addons/formData'
 
 const api = wretch(import.meta.env.VITE_API_URL + '/api')
   .options({ credentials: 'include', mode: 'cors' })
   .addon(QueryStringAddon)
+  .addon(FormDataAddon)
 
 export interface FastifyError<
   StatusCode extends StatusCodes,
@@ -159,15 +161,10 @@ export const updatePasswordFx = createEffect<
 
 /* Card */
 
-export enum ProfilePictureSize {
+export enum AvatarSize {
   SMALL = 'sm',
   MEDIUM = 'md',
   LARGE = 'lg',
-}
-
-interface ProfilePicture {
-  size: ProfilePictureSize
-  filename: string
 }
 
 export enum SocialNetwork {
@@ -198,38 +195,14 @@ export interface SocialNetworkButton {
   value: string
 }
 
-export type BackgroundType = 'Gradient' | 'CustomImage'
-
-export interface Background {
-  type: BackgroundType
-  value: string
+export enum ImageKind {
+  PROFILE_PICTURE = 'ProfilePicture',
+  BACKGROUND = 'Background',
 }
 
-type UpdateCard = Partial<{
-  username: string
-  name: string
-  description: string
-  profilePicture: Partial<ProfilePicture>
-  socialNetworks: SocialNetworkButton[]
-  background: Background
-}>
-
-type UpdateCardError = FastifyError<
-  StatusCodes.CONFLICT,
-  'FST_USERNAME_EXIST',
-  ReasonPhrases.CONFLICT
->
-
-export const updateCardFx = createEffect<
-  UpdateCard,
-  null,
-  WretchError<UpdateCardError>
->((card) => {
-  return api.url('/v1/card').patch(card).json()
-})
-
-export interface UploadImage {
-  imageBase64: string
+interface UploadImage {
+  file: File
+  kind: ImageKind
 }
 
 interface Image {
@@ -240,23 +213,18 @@ export const uploadImageFx = createEffect<
   UploadImage,
   Image,
   WretchError<unknown>
->(({ imageBase64 }) => {
-  return api.url('/v1/upload-image').post({ imageBase64 }).json()
+>((formData) => {
+  return api.url('/v1/image').formData(formData).post().json()
 })
 
 interface Card {
   username: string
   name: string
   description: string
-  profilePicture: {
-    size: ProfilePictureSize
-    filename: string | null
-  }
+  avatarSize: AvatarSize
+  avatarFilename: string | null
   socialNetworks: SocialNetworkButton[]
-  background: {
-    type: BackgroundType
-    value: string
-  } | null
+  background: string | null
   isPublished: boolean
 }
 
@@ -286,4 +254,22 @@ export const getCardPublicFx = createEffect<
 
 export const publishCardFx = createEffect(() => {
   return api.url('/v1/publish-card').post().json()
+})
+
+type UpdateCard = Partial<{
+  [Property in keyof Card]: NonNullable<Card[Property]>
+}>
+
+type UpdateCardError = FastifyError<
+  StatusCodes.CONFLICT,
+  'FST_USERNAME_EXIST',
+  ReasonPhrases.CONFLICT
+>
+
+export const updateCardFx = createEffect<
+  UpdateCard,
+  null,
+  WretchError<UpdateCardError>
+>((card) => {
+  return api.url('/v1/card').patch(card).json()
 })

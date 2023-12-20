@@ -5,24 +5,28 @@ import { $cardData } from './model'
 
 export const ViewPage = () => {
   const cardData = useUnit($cardData)
-  const { name, socialNetworks, profilePicture, background, description } =
-    cardData!
+  const {
+    name,
+    socialNetworks,
+    avatarSize,
+    avatarFilename,
+    background,
+    description,
+  } = cardData!
 
   const getPhotoSrc = (filename: string | null) => {
     if (!filename) return ''
 
-    return import.meta.env.VITE_API_URL + `/api/v1/images/${filename}`
+    return import.meta.env.VITE_API_URL + `/api/v1/image/${filename}`
   }
 
   return (
-    <BusinessCard.Background
-      backgroundValue={background ? background.value : null}
-    >
+    <BusinessCard.Background backgroundValue={background ? background : null}>
       <div className="py-24">
         <BusinessCard>
-          <BusinessCard.PhotoContainer size={profilePicture.size}>
-            <BusinessCard.Photo src={getPhotoSrc(profilePicture.filename)} />
-          </BusinessCard.PhotoContainer>
+          <BusinessCard.AvatarContainer size={avatarSize}>
+            <BusinessCard.Avatar src={getPhotoSrc(avatarFilename)} />
+          </BusinessCard.AvatarContainer>
           <BusinessCard.Name>{name}</BusinessCard.Name>
           <BusinessCard.Description>{description}</BusinessCard.Description>
           <div className="flex justify-center flex-wrap mt-4">

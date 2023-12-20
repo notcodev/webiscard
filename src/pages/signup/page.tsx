@@ -1,11 +1,10 @@
 import { reflect } from '@effector/reflect'
 import { useUnit } from 'effector-react'
 import { CheckIcon } from 'lucide-react'
-import { FormEventHandler, forwardRef, useEffect } from 'react'
+import { FormEventHandler, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { AuthLayout } from '~/entites/layouts'
 import { useTimer } from '~/shared/lib/react'
-import { cn } from '~/shared/lib/shadcn'
 import { routes } from '~/shared/routing'
 import {
   Alert,
@@ -19,8 +18,8 @@ import {
   CardHeader,
   CardTitle,
   Field,
-  InputProps,
-  PasswordInput, PrefixInput
+  PasswordInput,
+  PrefixInput,
 } from '~/shared/ui'
 import {
   $formDisabled,
@@ -124,7 +123,7 @@ const PageLinkField = () => {
       disabled={disabled}
       asChild
     >
-      <PrefixInput prefix="webiscard.github.io/" />
+      <PrefixInput prefix={`${import.meta.env.VITE_APP_DOMAIN}/c/`} />
     </Field>
   )
 }

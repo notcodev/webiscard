@@ -1,6 +1,6 @@
 import { useUnit } from 'effector-react'
 import { forwardRef, useEffect, useId } from 'react'
-import { ProfilePictureSize } from '~/shared/api'
+import { AvatarSize } from '~/shared/api'
 import { createImageUploader } from '~/shared/lib/react'
 import {
   Button,
@@ -14,7 +14,7 @@ import {
 } from '~/shared/ui'
 import * as description from '../../features/description'
 import * as name from '../../features/name'
-import * as photo from '../../features/photo'
+import * as avatar from '../../features/avatar'
 import * as username from '../../features/username'
 import { profileTabClosed } from './model'
 
@@ -35,7 +35,7 @@ const PageLinkEditInput = forwardRef<HTMLInputElement, InputProps>(
           type="text"
           className={className}
           disabled={fieldDisabled}
-          prefix="webiscard.github.io/c/"
+          prefix={`${import.meta.env.VITE_APP_DOMAIN}/c/`}
           ref={ref}
           {...props}
         />
@@ -139,22 +139,22 @@ const DescriptionField = () => {
 }
 
 const captionText = {
-  [ProfilePictureSize.SMALL]: 'S',
-  [ProfilePictureSize.MEDIUM]: 'M',
-  [ProfilePictureSize.LARGE]: 'L',
+  [AvatarSize.SMALL]: 'S',
+  [AvatarSize.MEDIUM]: 'M',
+  [AvatarSize.LARGE]: 'L',
 }
 
 const PhotoSizeCaption = ({
   size,
   active,
 }: {
-  size: ProfilePictureSize
+  size: AvatarSize
   active: boolean
 }) => {
   return (
     <button
       className="text-sm text-muted-foreground data-[active=true]:text-primary data-[active=true]:font-medium px-1"
-      onClick={() => photo.sizeChanged(size)}
+      onClick={() => avatar.sizeChanged(size)}
       data-active={active}
     >
       {captionText[size]}
@@ -163,18 +163,18 @@ const PhotoSizeCaption = ({
 }
 
 const PhotoSizeSlider = () => {
-  const currentSize = useUnit(photo.$size)
+  const currentSize = useUnit(avatar.$size)
   const ascendingSizes = [
-    ProfilePictureSize.SMALL,
-    ProfilePictureSize.MEDIUM,
-    ProfilePictureSize.LARGE,
+    AvatarSize.SMALL,
+    AvatarSize.MEDIUM,
+    AvatarSize.LARGE,
   ]
 
   return (
     <>
       <Slider
         value={[ascendingSizes.indexOf(currentSize)]}
-        onValueChange={(value) => photo.sizeChanged(ascendingSizes[value[0]])}
+        onValueChange={(value) => avatar.sizeChanged(ascendingSizes[value[0]])}
         max={2}
       />
       <div className="w-full flex justify-between">
@@ -192,12 +192,11 @@ const PhotoSizeSlider = () => {
 
 const PhotoField = () => {
   const inputId = useId()
-  const imageUploaded = useUnit(photo.imagePrepared)
-  const imageSource = useUnit(photo.$source)
+  const imageUploaded = useUnit(avatar.imagePrepared)
+  const imageSource = useUnit(avatar.$source)
 
   const { onChange } = createImageUploader({
     onUploaded: imageUploaded,
-    maxSize: 8e6,
   })
 
   return (

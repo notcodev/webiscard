@@ -48,7 +48,6 @@ const UploadBackground = () => {
 
   const { onChange } = createImageUploader({
     onUploaded: imageUploaded,
-    maxSize: 8e6,
   })
 
   return (

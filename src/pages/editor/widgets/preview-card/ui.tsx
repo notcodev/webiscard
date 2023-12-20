@@ -9,7 +9,7 @@ import { createImageUploader } from '~/shared/lib/react'
 import * as background from '../../features/background'
 import * as description from '../../features/description'
 import * as name from '../../features/name'
-import * as photo from '../../features/photo'
+import * as avatar from '../../features/avatar'
 import * as publish from '../../features/publish'
 import * as socialNetworks from '../../features/social-networks'
 import * as username from '../../features/username'
@@ -17,16 +17,15 @@ import { useAutoResizableField } from './lib/react'
 
 const Photo = () => {
   const inputId = useId()
-  const [size, imageSource] = useUnit([photo.$size, photo.$source])
-  const imageUploaded = useUnit(photo.imagePrepared)
+  const [size, imageSource] = useUnit([avatar.$size, avatar.$source])
+  const imageUploaded = useUnit(avatar.imagePrepared)
 
   const { onChange } = createImageUploader({
     onUploaded: imageUploaded,
-    maxSize: 8e6,
   })
 
   return (
-    <BusinessCard.PhotoContainer
+    <BusinessCard.AvatarContainer
       size={size}
       className="group cursor-pointer"
       asChild
@@ -37,7 +36,7 @@ const Photo = () => {
             Add <br /> photo
           </span>
         ) : (
-          <BusinessCard.Photo src={imageSource} />
+          <BusinessCard.Avatar src={imageSource} />
         )}
         <input
           key={imageSource}
@@ -49,7 +48,7 @@ const Photo = () => {
           onChange={onChange}
         />
       </label>
-    </BusinessCard.PhotoContainer>
+    </BusinessCard.AvatarContainer>
   )
 }
 
@@ -185,7 +184,7 @@ const Publish = () => {
       <button
         onClick={async () => {
           await navigator.clipboard.writeText(
-            `https://webiscard.ru/c/${lastUsername}`,
+            `https://${import.meta.env.VITE_APP_DOMAIN}/c/${lastUsername}`,
           )
           setCopied(true)
         }}
@@ -198,7 +197,7 @@ const Publish = () => {
             className="leading-none relative block aria-hidden:translate-y-8 transition-transform duration-300"
             aria-hidden={copied}
           >
-            webiscard.ru/c/{lastUsername}
+            {import.meta.env.VITE_APP_DOMAIN}/c/{lastUsername}
           </span>
           <span
             className="leading-none absolute w-full text-center left-0 aria-hidden:-translate-y-8 transition-transform duration-300 top-2"

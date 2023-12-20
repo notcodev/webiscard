@@ -2,7 +2,7 @@ import { HTMLAttributes } from 'react'
 import { cn } from '~/shared/lib/shadcn'
 import { Description } from './description'
 import { Name } from './name'
-import { Photo, PhotoContainer } from './photo'
+import { Avatar, AvatarContainer } from './avatar'
 import { SocialNetwork } from './social-network'
 import { Background } from './background'
 
@@ -25,8 +25,8 @@ export const BusinessCard = ({
 }
 
 BusinessCard.Background = Background
-BusinessCard.PhotoContainer = PhotoContainer
-BusinessCard.Photo = Photo
+BusinessCard.AvatarContainer = AvatarContainer
+BusinessCard.Avatar = Avatar
 BusinessCard.Name = Name
 BusinessCard.Description = Description
 BusinessCard.SocialNetwork = SocialNetwork
