@@ -12,9 +12,9 @@ import {
   Slider,
   Textarea,
 } from '~/shared/ui'
+import * as avatar from '../../features/avatar'
 import * as description from '../../features/description'
 import * as name from '../../features/name'
-import * as avatar from '../../features/avatar'
 import * as username from '../../features/username'
 import { profileTabClosed } from './model'
 
@@ -164,11 +164,7 @@ const PhotoSizeCaption = ({
 
 const PhotoSizeSlider = () => {
   const currentSize = useUnit(avatar.$size)
-  const ascendingSizes = [
-    AvatarSize.SMALL,
-    AvatarSize.MEDIUM,
-    AvatarSize.LARGE,
-  ]
+  const ascendingSizes = [AvatarSize.SMALL, AvatarSize.MEDIUM, AvatarSize.LARGE]
 
   return (
     <>

@@ -1,8 +1,8 @@
 import { attach, createApi, createStore, sample } from 'effector'
 import * as uuid from 'uuid'
 import { SocialNetworkButton } from '~/shared/api'
-import { getCardDraftFx } from '../../shared/api'
 import * as api from '~/shared/api'
+import { getCardDraftFx } from '../../shared/api'
 
 const updateCardFx = attach({ effect: api.updateCardFx })
 

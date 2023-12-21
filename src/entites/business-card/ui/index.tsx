@@ -1,10 +1,10 @@
 import { HTMLAttributes } from 'react'
 import { cn } from '~/shared/lib/shadcn'
+import { Avatar, AvatarContainer } from './avatar'
+import { Background } from './background'
 import { Description } from './description'
 import { Name } from './name'
-import { Avatar, AvatarContainer } from './avatar'
 import { SocialNetwork } from './social-network'
-import { Background } from './background'
 
 export const BusinessCard = ({
   className,

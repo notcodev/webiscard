@@ -1,5 +1,5 @@
-import { NotFoundPage } from './page'
 import { currentRoute } from './model'
+import { NotFoundPage } from './page'
 
 export const NotFoundRoute = {
   view: NotFoundPage,

@@ -1,5 +1,5 @@
+import { routes } from '~/shared/routing'
 import { Anchor, Title, WebiscardIcon } from '~/shared/ui'
-import { routes } from '~/shared/routing.ts'
 
 export const NotFoundPage = () => {
   return (

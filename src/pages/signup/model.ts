@@ -1,5 +1,9 @@
 import { attach, createEvent, createStore, sample, Store } from 'effector'
 import { and, every, not, or } from 'patronum'
+import {
+  notificationArrived,
+  NotificationType,
+} from '~/entites/notification-center'
 import * as api from '~/shared/api'
 import { createField } from '~/shared/lib/effector'
 import { routes } from '~/shared/routing'
@@ -11,8 +15,6 @@ import {
   UsernameValidationError,
   UsernameValidator,
 } from '~/shared/validators'
-import { notificationArrived } from '~/entites/notification-center'
-import { NotificationType } from '~/entites/notification-center/model.ts'
 
 export const currentRoute = routes.auth.signup
 export const anonymousRoute = chainAnonymous(currentRoute, {

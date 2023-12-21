@@ -12,8 +12,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  Label, PrefixInput,
-  Switch
+  Label,
+  PrefixInput,
+  Switch,
 } from '~/shared/ui'
 import { SocialNetworkIcon } from '../../../entities/social-network-icon'
 import { buttonsApi } from '../model'

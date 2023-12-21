@@ -1,8 +1,8 @@
 import { attach, sample } from 'effector'
-import { createField } from '~/shared/lib/effector'
-import { getCardDraftFx } from '../../shared/api'
 import { debounce } from 'patronum'
 import * as api from '~/shared/api'
+import { createField } from '~/shared/lib/effector'
+import { getCardDraftFx } from '../../shared/api'
 
 const updateCardFx = attach({ effect: api.updateCardFx })
 

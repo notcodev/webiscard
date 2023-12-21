@@ -1,4 +1,5 @@
 import { createRoutesView } from 'atomic-router-react'
+import { NotFoundPage } from '~/pages/not-found/page'
 // import { UpdatePasswordRoute } from '~/pages/update-password'
 import { EditorRoute } from './editor'
 import { HomeRoute } from './home'
@@ -7,7 +8,6 @@ import { NotFoundRoute } from './not-found'
 // import { ResetPasswordRoute } from './reset-password'
 import { SignupRoute } from './signup'
 import { ViewRoute } from './view'
-import { NotFoundPage } from '~/pages/not-found/page.tsx'
 
 export const Pages = createRoutesView({
   routes: [

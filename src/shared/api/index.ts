@@ -1,8 +1,8 @@
 import { createEffect } from 'effector'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import wretch, { WretchResponse } from 'wretch'
-import QueryStringAddon from 'wretch/addons/queryString'
 import FormDataAddon from 'wretch/addons/formData'
+import QueryStringAddon from 'wretch/addons/queryString'
 
 const api = wretch(import.meta.env.VITE_API_URL + '/api')
   .options({ credentials: 'include', mode: 'cors' })

@@ -14,7 +14,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  Label, PrefixInput
+  Label,
+  PrefixInput,
 } from '~/shared/ui'
 import { SocialNetworkIcon } from '../../../entities/social-network-icon'
 
