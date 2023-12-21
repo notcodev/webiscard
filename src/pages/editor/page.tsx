@@ -1,4 +1,9 @@
-import { useEffect } from 'react'
+import {
+  ButtonHTMLAttributes,
+  PropsWithChildren,
+  useEffect,
+  useState,
+} from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger, Title } from '~/shared/ui'
 import { pageUnmounted } from './shared/config'
 import { BackgroundTab } from './widgets/background-tab'
@@ -37,10 +42,56 @@ const EditorTabs = () => {
 
 const SideBar = () => {
   return (
-    <div className="hidden left-0 top-0 bottom-0 fixed md:flex md:border-r bg-background flex-col w-full md:w-[384px] p-6 h-full overflow-scroll">
+    <div className="left-0 top-0 bottom-0 fixed flex md:border-r bg-background flex-col w-full md:w-[384px] p-6 h-full overflow-scroll">
       <Header />
       <EditorTabs />
     </div>
+  )
+}
+
+interface DisclosureButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement> {
+  opened: boolean
+}
+
+const DisclosureButton = ({ opened, ...props }: DisclosureButtonProps) => {
+  const config = !opened
+    ? {
+        className:
+          'bg-black bg-opacity-[35%] hover:bg-opacity-[45%] transition duration-300',
+        text: 'Edit',
+      }
+    : {
+        className: 'bg-primary hover:bg-primary/90',
+        text: 'Preview',
+      }
+
+  return (
+    <button
+      className={
+        'md:hidden inline-flex items-center h-10 fixed bottom-2 left-2 right-2 justify-center text-white font-medium rounded-lg ' +
+        config.className
+      }
+      {...props}
+    >
+      {config.text}
+    </button>
+  )
+}
+
+const DisclosureContainer = ({ children }: PropsWithChildren) => {
+  const [hidden, setHidden] = useState(false)
+
+  return (
+    <>
+      <div className="aria-hidden:hidden md:!block" aria-hidden={hidden}>
+        {children}
+      </div>
+      <DisclosureButton
+        opened={!hidden}
+        onClick={() => setHidden((prev) => !prev)}
+      />
+    </>
   )
 }
 
@@ -52,7 +103,9 @@ export const EditorPage = () => {
       <div className="md:pl-[384px]">
         <PreviewCard />
       </div>
-      <SideBar />
+      <DisclosureContainer>
+        <SideBar />
+      </DisclosureContainer>
     </main>
   )
 }
