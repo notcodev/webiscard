@@ -1,15 +1,9 @@
 import { reflect } from '@effector/reflect'
 import { useUnit } from 'effector-react'
-import { CheckIcon } from 'lucide-react'
 import { FormEventHandler, useEffect } from 'react'
-import { createPortal } from 'react-dom'
 import { AuthLayout } from '~/entites/layouts'
-import { useTimer } from '~/shared/lib/react'
 import { routes } from '~/shared/routing'
 import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
   Anchor,
   Button,
   CardContent,
@@ -27,8 +21,6 @@ import {
   formSubmitted,
   pageUnmounted,
   passwordField,
-  TIMEOUT_SECONDS,
-  timeoutRedirect,
   usernameField,
 } from './model'
 
@@ -138,31 +130,6 @@ const SubmitButton = reflect({
   },
 })
 
-const SuccessAlert = () => {
-  const countdown = useTimer(TIMEOUT_SECONDS)
-
-  return (
-    <div className="absolute mx-auto left-0 right-0 top-4 max-w-md px-4">
-      <Alert>
-        <CheckIcon className="h-4 w-4" />
-        <AlertTitle>Success!</AlertTitle>
-        <AlertDescription>
-          In {countdown} seconds you will be redirected to log in page
-        </AlertDescription>
-      </Alert>
-    </div>
-  )
-}
-
-const SuccessAlertPortal = () => {
-  const showAlert = useUnit(timeoutRedirect.$pending)
-
-  return (
-    showAlert &&
-    createPortal(<SuccessAlert />, document.querySelector('#popup-container')!)
-  )
-}
-
 export const SignupPage = () => {
   useEffect(() => pageUnmounted, [])
 
@@ -210,7 +177,6 @@ export const SignupPage = () => {
           <Anchor to={routes.auth.login}>Sign in</Anchor>
         </span>
       </div>
-      <SuccessAlertPortal />
     </AuthLayout>
   )
 }

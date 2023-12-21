@@ -1,5 +1,9 @@
 import { attach, createEvent, createStore, sample } from 'effector'
 import { not } from 'patronum'
+import {
+  notificationArrived,
+  NotificationType,
+} from '~/entites/notification-center'
 import * as api from '~/shared/api'
 import { getCardDraftFx } from '../../shared/api'
 
@@ -22,4 +26,15 @@ sample({
   clock: buttonPressed,
   filter: not($requestPending),
   target: publishCardFx,
+})
+
+sample({
+  clock: publishCardFx.done,
+  fn() {
+    return {
+      type: 'success' as NotificationType,
+      description: 'Your card has been published successfully',
+    }
+  },
+  target: notificationArrived,
 })

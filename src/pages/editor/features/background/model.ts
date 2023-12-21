@@ -1,8 +1,8 @@
 import { attach, createEvent, createStore, sample } from 'effector'
 import * as api from '~/shared/api'
+import { ImageKind } from '~/shared/api'
 import { getImageUrl } from '~/shared/utils'
 import { getCardDraftFx } from '../../shared/api'
-import { ImageKind } from '~/shared/api'
 
 const uploadImageFx = attach({ effect: api.uploadImageFx })
 const updateCardFx = attach({ effect: api.updateCardFx })

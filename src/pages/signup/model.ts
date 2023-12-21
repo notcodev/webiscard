@@ -1,7 +1,7 @@
 import { attach, createEvent, createStore, sample, Store } from 'effector'
 import { and, every, not, or } from 'patronum'
 import * as api from '~/shared/api'
-import { createField, createTimeoutRedirect } from '~/shared/lib/effector'
+import { createField } from '~/shared/lib/effector'
 import { routes } from '~/shared/routing'
 import { chainAnonymous } from '~/shared/session'
 import {
@@ -11,6 +11,8 @@ import {
   UsernameValidationError,
   UsernameValidator,
 } from '~/shared/validators'
+import { notificationArrived } from '~/entites/notification-center'
+import { NotificationType } from '~/entites/notification-center/model.ts'
 
 export const currentRoute = routes.auth.signup
 export const anonymousRoute = chainAnonymous(currentRoute, {
@@ -20,13 +22,6 @@ export const anonymousRoute = chainAnonymous(currentRoute, {
 const signUpFx = attach({ effect: api.signUpFx })
 export const formSubmitted = createEvent()
 export const pageUnmounted = createEvent()
-
-export const TIMEOUT_SECONDS = 5
-export const timeoutRedirect = createTimeoutRedirect({
-  route: routes.auth.login,
-  timeout: TIMEOUT_SECONDS * 1000,
-  clearOn: pageUnmounted,
-})
 
 type EmailError = EmailValidationError | 'exist'
 export const emailField = createField<string, EmailError>({
@@ -95,7 +90,18 @@ sample({
 
 sample({
   clock: signUpFx.done,
-  target: timeoutRedirect.call,
+  target: routes.auth.login.open,
+})
+
+sample({
+  clock: signUpFx.done,
+  fn() {
+    return {
+      type: 'success' as NotificationType,
+      description: 'You have been successfully registered',
+    }
+  },
+  target: notificationArrived,
 })
 
 /* Catching errors */

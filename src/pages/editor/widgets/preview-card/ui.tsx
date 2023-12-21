@@ -220,7 +220,7 @@ const Publish = () => {
 export const PreviewCard = () => {
   return (
     <Background>
-      <div className="py-24">
+      <div className="py-36">
         <BusinessCard>
           <Photo />
           <Name />

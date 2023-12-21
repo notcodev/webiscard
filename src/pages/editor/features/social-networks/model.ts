@@ -1,5 +1,5 @@
 import { attach, createApi, createStore, sample } from 'effector'
-import { v4 as uuidv4 } from 'uuid'
+import * as uuid from 'uuid'
 import { SocialNetworkButton } from '~/shared/api'
 import { getCardDraftFx } from '../../shared/api'
 import * as api from '~/shared/api'
@@ -50,7 +50,7 @@ export const buttonsApi = createApi($buttons, {
     return buttonsNew
   },
   add(buttons, data: Pick<SocialNetworkButton, 'type' | 'value'>) {
-    const id = uuidv4()
+    const id = uuid.v4()
 
     return { ...buttons, [id]: { id, ...data, enabled: true } }
   },
