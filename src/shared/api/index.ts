@@ -102,63 +102,6 @@ export const signUpFx = createEffect<SignUp, null, WretchError<SignUpError>>(
   },
 )
 
-/* Send recovery email */
-
-interface ResetPassword {
-  email: string
-}
-
-export const resetPasswordFx = createEffect<
-  ResetPassword,
-  null,
-  WretchError<null>
->((body) => {
-  return api.url('/reset-password/send').post(body).json()
-})
-
-/* Validate key */
-
-interface ValidateKey {
-  key: string
-}
-
-interface ValidateKeyResponse {
-  is_valid: boolean
-}
-
-interface ValidateKeyError {
-  error: 'key_invalid'
-}
-
-export const validateKeyFx = createEffect<
-  ValidateKey,
-  ValidateKeyResponse,
-  WretchError<ValidateKeyError>
->(({ key }: ValidateKey) => {
-  return api
-    .get(`/reset-password/validate?key=${key}`)
-    .json<ValidateKeyResponse>()
-})
-
-/* Update password */
-
-interface UpdatePassword {
-  current?: string
-  new: string
-}
-
-interface UpdatePasswordError {
-  error: 'unauthorized' | 'invalid_credentials'
-}
-
-export const updatePasswordFx = createEffect<
-  UpdatePassword,
-  null,
-  UpdatePasswordError
->((body) => {
-  return api.url('/users/me/password').put(body).json()
-})
-
 /* Card */
 
 export enum AvatarSize {
@@ -247,7 +190,7 @@ export type GetCardPublicError = FastifyError<
 export const getCardPublicFx = createEffect<
   GetCard,
   Omit<Card, 'username' | 'isPublished'>,
-  WretchError<unknown>
+  WretchError<GetCardPublicError>
 >(({ username }) => {
   return api.get(`/v1/card/${username}`).json()
 })

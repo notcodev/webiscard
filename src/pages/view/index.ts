@@ -5,6 +5,8 @@ import { ViewPage } from './page'
 
 export const ViewRoute = {
   view: createRouteView({
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     route: cardLoadedRoute,
     view: ViewPage,
     otherwise: PageLoader,

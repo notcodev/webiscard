@@ -1,9 +1,9 @@
-import { Event, Store } from 'effector'
+import { EventCallable, Store } from 'effector'
 import { useUnit } from 'effector-react'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 
 export const useAutoResizableField = (config: {
-  field: { $value: Store<string>; changed: Event<string> }
+  field: { $value: Store<string>; changed: EventCallable<string> }
   placeholder: string
 }) => {
   const [focus, setFocus] = useState<boolean>(false)
